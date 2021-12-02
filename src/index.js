@@ -14,14 +14,14 @@ import logger from 'redux-logger'
 
 // Importing Reducers
 import { combineReducers } from 'redux'
-// import cryptosReducer from './reducers/cryptosReducer'
+import exchangesReducer from './reducers/exchangesReducer'
 // import usersReducer from './reducers/usersReducer'
 
 import reportWebVitals from './reportWebVitals';
 
 const rootReducer = combineReducers({
   // user: usersReducer,
-  // crypto: cryptosReducer
+  exchange: exchangesReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -21,8 +21,10 @@ npm install --save react-router-dom
 ```ruby
 npm start
 ```
+* Add src/actions
+* Downgrade react-router-dom to 5, to use switch
 ```ruby
-{...}
+npm install react-router-dom@5
 ```
 ```ruby
 {...}
