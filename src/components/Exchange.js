@@ -11,10 +11,10 @@ class Exchange extends React.Component {
         const currencies = this.props.exchange.currencies.map(c => <Currency currency={c} />)
         return (
             <div className="cryptoList">
-                <h1>{name}</h1>
+                <h2>{name}</h2>
                 <div className="cryptoList__container">
                     <div className="crypto__header">
-                        <p>Commodities</p>
+                    <h3>Commodities:</h3>
                     </div>
                     <div className="crypto__content">
                         <div className="crypto__rows">
@@ -22,7 +22,7 @@ class Exchange extends React.Component {
                         </div>
                     </div>
                     <div className="crypto__header">
-                        <p>Currencies</p>
+                        <h3>Currencies:</h3>
                     </div>
                     <div className="crypto__content">
                         <div className="crypto__rows">
