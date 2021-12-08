@@ -1,22 +1,21 @@
 import React from 'react'
-import ExchangeAdminDelete from './ExchangeAdminDelete'
+import CommodityAdminDelete from './CommodityAdminDelete'
 // import './Exchange.css'
 
-class ExchangeListAdminDelete extends React.Component {
+class CommodityListAdminDelete extends React.Component {
 
     render() {
-        const exchanges = this.props.exchangeData.map(c => <ExchangeAdminDelete exchange={c} />)
+        const commodities = this.props.commodityData.map(c => <CommodityAdminDelete commodity={c} />)
         return (
             <div className="cryptoList">
                 {/* <h1>Select an Exchange or create a one:</h1> */}
                 <div className="cryptoList__container">
                     <div className="crypto__header">
-                        <h3>Click to delete an Exchange:</h3>
-                        <p>This will also delete all its commodities and currencies.</p>
+                        <h3>Click to delete a Commodity:</h3>
                     </div>
                     <div className="crypto__content">
                         <div className="crypto__rows">
-                        {exchanges}
+                            {commodities}
                         </div>
                     </div>
                 </div>
@@ -25,4 +24,4 @@ class ExchangeListAdminDelete extends React.Component {
     }
 }
 
-export default ExchangeListAdminDelete
+export default CommodityListAdminDelete

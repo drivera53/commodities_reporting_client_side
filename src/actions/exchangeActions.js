@@ -1,3 +1,5 @@
+// Fetching exchanges, commodities and currencies
+
 export const fetchExchanges = () => {
     return (dispatch) => {
         dispatch({ type: 'LOADING_EXCHANGES'})
@@ -10,6 +12,34 @@ export const fetchExchanges = () => {
         })
     }
 }
+
+export const fetchCommodities = () => {
+    return (dispatch) => {
+        dispatch({ type: 'LOADING_COMMODITIES'})
+        fetch('http://localhost:3001/commodities')
+        .then(response => {
+            return response.json()
+        })
+        .then(responseJSON => {
+            dispatch({ type: 'ADD_COMMODITIES', commodities: responseJSON})
+        })
+    }
+}
+
+export const fetchCurrencies = () => {
+    return (dispatch) => {
+        dispatch({ type: 'LOADING_CURRENCIES'})
+        fetch('http://localhost:3001/currencies')
+        .then(response => {
+            return response.json()
+        })
+        .then(responseJSON => {
+            dispatch({ type: 'ADD_CURRENCIES', currencies: responseJSON})
+        })
+    }
+}
+
+// Fetch functios for Create and Delete
 
 export const createExchange = exchangeObj => {
     return {

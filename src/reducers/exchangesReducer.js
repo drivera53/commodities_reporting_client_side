@@ -1,5 +1,7 @@
 const exchangesReducer = (state = {
     exchanges: [],
+    commodities: [],
+    currencies: [],
     loading:false
 }, action) => {
     switch(action.type) {
@@ -13,6 +15,30 @@ const exchangesReducer = (state = {
             return {
                 ...state,
                 exchanges: action.exchanges,
+                loading: false
+            }
+        case 'LOADING_COMMODITIES':
+            return {
+                ...state,
+                commodities: [...state.commodities],
+                loading: true
+            }
+        case 'ADD_COMMODITIES':
+            return {
+                ...state,
+                commodities: action.commodities,
+                loading: false
+            }
+        case 'LOADING_CURRENCIES':
+            return {
+                ...state,
+                currencies: [...state.currencies],
+                loading: true
+            }
+        case 'ADD_CURRENCIES':
+            return {
+                ...state,
+                currencies: action.currencies,
                 loading: false
             }
         case 'CREATE_EXCHANGE':

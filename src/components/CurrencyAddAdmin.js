@@ -74,7 +74,7 @@ export class CurrencyAddAdmin extends React.Component {
                     </div>
                     <div className="crypto__content">
                         <form onSubmit={this.handleSubmit}>
-                            <h3>Create new commodity</h3>
+                            <h3>Create new currency</h3>
                             <label>Name:</label>
                             <br></br>
                             <input

@@ -30,7 +30,7 @@ export class ExchangeListAdmin extends React.Component {
                 {/* <h1>Select an Exchange or create a one:</h1> */}
                 <div className="cryptoList__container">
                     <div className="crypto__header">
-                        <p>Select an Exchange or create a one:</p>
+                        <p>Select an Exchange or create one:</p>
                     </div>
                     <div className="crypto__content">
                         <div className="crypto__rows">

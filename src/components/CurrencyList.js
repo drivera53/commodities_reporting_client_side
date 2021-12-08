@@ -1,14 +1,14 @@
 import React from 'react'
-import Exchange from './Exchange'
+import CurrencyUser from './CurrencyUser'
 import './Exchange.css'
 import {
     Link
 } from 'react-router-dom'
 
-class ExchangeList extends React.Component {
+class CurrencyList extends React.Component {
 
     render() {
-        const exchanges = this.props.exchangeData.map(c => <Exchange exchange={c} />)
+        const currencies = this.props.currencyData.map(c => <CurrencyUser currency={c} />)
         return (
             <div>
                 <h1>Welcome User</h1>
@@ -20,19 +20,25 @@ class ExchangeList extends React.Component {
                             </div>
                         </div>
                     </Link>
-                    <Link to={"/currencies"}>
+                    <Link to={"/"}>
                         <div id="currencies" className="row">
                             <div className="row__intro">
-                                <h1>Currencies</h1>
+                                <h1>Exchanges</h1>
                             </div>
                         </div>
                     </Link>
                 </div>
-                <h2>Exchanges:</h2>
-                <div>{exchanges}</div>
+                <h2>Currencies:</h2>
+                <div className="cryptoList__container">
+                    <div className="crypto__content">
+                        <div className="crypto__rows">
+                            <div>{currencies}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
 }
 
-export default ExchangeList
+export default CurrencyList
