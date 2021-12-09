@@ -39,7 +39,7 @@ export const fetchCurrencies = () => {
     }
 }
 
-// Fetch functios for Create and Delete
+// Fetch functios for Create
 
 export const createExchange = exchangeObj => {
     return {
@@ -122,6 +122,8 @@ export function createCurrencyFetch(currencyInfo){
     })
 }
 
+// Fetch functios for Delete
+
 export const deleteExchange = exchangeObj => {
     return {
         type: 'DELETE_EXCHANGE',
@@ -140,6 +142,7 @@ export function deleteExchangeFetch(exchangeInfo){
     })
     .then(r=>r.json())
     .then(data=>{
+        // console.log(data)
         if(data.error){
             alert(data.error)
         } else {
@@ -148,4 +151,61 @@ export function deleteExchangeFetch(exchangeInfo){
         }
     })
 }
+
+export const deleteCommodity = commodityObj => {
+    return {
+        type: 'DELETE_COMMODITY',
+        payload: commodityObj
+    }
+}
+
+export function deleteCommodityFetch(commodityInfo){
+    return dispatch => fetch(`http://localhost:3001/commodities/special_delete`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(commodityInfo) 
+    })
+    .then(r=>r.json())
+    .then(data=>{
+        if(data.error){
+            alert(data.error)
+        } else {
+            let commodity_json = JSON.parse(data.commodities)
+            dispatch(deleteCommodity(commodity_json))
+        }
+    })
+}
+
+export const deleteCurrency = currencyObj => {
+    return {
+        type: 'DELETE_CURRENCY',
+        payload: currencyObj
+    }
+}
+
+export function deleteCurrencyFetch(currencyInfo){
+    return dispatch => fetch(`http://localhost:3001/currencies/special_delete`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(currencyInfo) 
+    })
+    .then(r=>r.json())
+    .then(data=>{
+        if(data.error){
+            alert(data.error)
+        } else {
+            let currency_json = JSON.parse(data.currencies)
+            dispatch(deleteCurrency(currency_json))
+        }
+    })
+}
+
+
+
 

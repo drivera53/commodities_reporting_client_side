@@ -65,6 +65,18 @@ const exchangesReducer = (state = {
                 exchanges: action.payload,
                 loading: false
             }
+        case 'DELETE_COMMODITY':
+            return {
+                ...state,
+                commodities: action.payload,
+                loading: false
+            }
+        case 'DELETE_CURRENCY':
+            return {
+                ...state,
+                currencies: action.payload,
+                loading: false
+            }
 
         default:
             return state

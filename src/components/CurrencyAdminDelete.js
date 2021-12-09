@@ -1,11 +1,23 @@
 import React from 'react'
 import './Currency.css'
+import { deleteCurrencyFetch } from '../actions/exchangeActions'
+import { connect } from 'react-redux'
 
 export class CurrencyAdminDelete extends React.Component {
+
+    handleDeleteSubmit = event => {
+        event.preventDefault()
+        const currencyObject = {
+            name: this.props.currency.name,
+            id: this.props.currency.id
+        }
+        this.props.deleteCurrencyFetch(currencyObject)
+    }
+
     render() {
         const {id, name, c_type, settlement_date, tenor, price, exchange_id, created_at, exchange} = this.props.currency
         return (
-            <div id="commodity" className="row">
+            <div id="commodity" className="row" onClick={this.handleDeleteSubmit}>
                 {/* <div className="row__image">
                     <img key={id} src={image} alt={name} height={40}/>
                 </div> */}
@@ -24,4 +36,10 @@ export class CurrencyAdminDelete extends React.Component {
     }
 }
 
-export default CurrencyAdminDelete
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteCurrencyFetch: (currencyInfo) => dispatch(deleteCurrencyFetch(currencyInfo))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(CurrencyAdminDelete)
