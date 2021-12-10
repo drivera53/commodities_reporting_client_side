@@ -1,32 +1,41 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { fetchLoggedInUser } from './actions/userActions'
+import { logOutUser } from './actions/userActions'
 import { fetchExchanges } from './actions/exchangeActions'
 import { fetchCommodities } from './actions/exchangeActions'
 import { fetchCurrencies } from './actions/exchangeActions'
+import LoginForm from './containers/loginForm'
 import ExchangeList from './components/ExchangeList'
 import CommodityList from './components/CommodityList'
 import CurrencyList from './components/CurrencyList'
-import ExchangeListAdmin from './components/ExchangeListAdmin'
+import AdminAddDataList from './components/AdminAddDataList'
 import ExchangeListAdminDelete from './components/ExchangeListAdminDelete'
 import CommodityListAdminDelete from './components/CommodityListAdminDelete'
 import CurrencyListAdminDelete from './components/CurrencyListAdminDelete'
 import ExchangeChooseAdmin from './components/ExchangeChooseAdmin'
 import CommodityAddAdmin from './components/CommodityAddAdmin'
 import CurrencyAddAdmin from './components/CurrencyAddAdmin'
+import NavBar from './components/NavBar'
+import NotLoggedInNavBar from './components/NotLoggedInNavBar'
+import WelcomeUser from './components/WelcomeUser'
+import WelcomeAdmin from './components/WelcomeAdmin'
+import AdminInfo from './components/AdminInfo'
+import AdminDeleteDataList from './components/AdminDeleteDataList'
+import Loading from './svg/Loading'
 
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom'
 
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
 
   fetchEverything = () => {
+    this.props.fetchLoggedInUser()
     this.props.fetchExchanges()
     this.props.fetchCommodities()
     this.props.fetchCurrencies()
@@ -38,7 +47,7 @@ class App extends Component {
 
   handleExchangeListLoading = () => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       return <ExchangeList exchangeData={this.props.exchangeData} />
     }
@@ -46,7 +55,7 @@ class App extends Component {
 
   handleCommodityListLoading = () => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       return <CommodityList commodityData={this.props.commodityData} />
     }
@@ -54,7 +63,7 @@ class App extends Component {
 
   handleCurrencyListLoading = () => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       return <CurrencyList currencyData={this.props.currencyData} />
     }
@@ -62,15 +71,15 @@ class App extends Component {
 
   handleExchangeListAdminLoading = () => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
-      return <ExchangeListAdmin exchangeData={this.props.exchangeData} />
+      return <AdminAddDataList exchangeData={this.props.exchangeData} />
     }
   }
 
   handleExchangeListAdminDeleteLoading = () => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       return <ExchangeListAdminDelete exchangeData={this.props.exchangeData} />
     }
@@ -78,7 +87,7 @@ class App extends Component {
 
   handleCommodityListAdminDeleteLoading = () => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       return <CommodityListAdminDelete commodityData={this.props.commodityData} />
     }
@@ -86,7 +95,7 @@ class App extends Component {
   
   handleCurrencyListAdminDeleteLoading = () => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       return <CurrencyListAdminDelete currencyData={this.props.currencyData} />
     }
@@ -94,7 +103,7 @@ class App extends Component {
 
   handleExchangeProps = (props) => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       const foundExchange = this.props.exchangeData.find(p=> p.id === Number(props.match.params.id))
       return <ExchangeChooseAdmin exchange={foundExchange}/>
@@ -103,7 +112,7 @@ class App extends Component {
 
   handleAddCommodityProps = (props) => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       const foundExchange = this.props.exchangeData.find(p=> p.id === Number(props.match.params.id))
       return <CommodityAddAdmin exchange={foundExchange}/>
@@ -112,163 +121,108 @@ class App extends Component {
 
   handleAddCurrencyProps = (props) => {
     if(this.props.loading) {
-      return <div>Loading...</div>
+      return <Loading />
     } else {
       const foundExchange = this.props.exchangeData.find(p=> p.id === Number(props.match.params.id))
       return <CurrencyAddAdmin exchange={foundExchange}/>
     }
   }
 
+  handleWelcomeAdminLoading = () => {
+    if(this.props.user_loading) {
+      return <Loading />
+    } else {
+      return <WelcomeAdmin current_user={this.props.current_user} />
+    }
+  }
+
+  handleAdminInfoLoading = () => {
+    if(this.props.user_loading) {
+      return <Loading />
+    } else {
+      return <AdminInfo current_user={this.props.current_user} />
+    }
+  }
+
+  logOut = () => {
+    localStorage.removeItem("token")
+    this.props.logOutUser()
+    alert("Succesfully log out!")
+  }
 
   render() {
     return (
       <>
-        <div className="App">
         <Router>
-          <div className="app__navBar">
-            {/* <NavBar /> */}
+          {this.props.login? <><div className="App">
+            <NavBar logOut = {this.logOut}/>
+            {this.handleWelcomeAdminLoading()}
+            <Switch>  
+
+              <Route exact path="/">
+                {this.handleAdminInfoLoading()}
+              </Route>
+
+              <Route exact path="/admin/add">
+                {this.handleExchangeListAdminLoading()}
+              </Route>
+
+              <Route path="/admin/add/:id" component={this.handleExchangeProps} />
+
+              <Route path="/admin/add_commodity/:id" component={this.handleAddCommodityProps} />
+
+              <Route path="/admin/add_currency/:id" component={this.handleAddCurrencyProps} />
+
+              <Route exact path="/admin/delete">
+                <AdminDeleteDataList />
+              </Route>
+
+              <Route exact path="/admin/delete_exchange">
+                {this.handleExchangeListAdminDeleteLoading()}
+              </Route>
+              
+              <Route exact path="/admin/delete_commodity">
+                {this.handleCommodityListAdminDeleteLoading()}
+              </Route>
+              
+              <Route exact path="/admin/delete_currency">
+                {this.handleCurrencyListAdminDeleteLoading()}
+              </Route>
+
+              <Route path="/">
+                {this.handleAdminInfoLoading()}
+              </Route>
+
+            </Switch>
           </div>
+          </>
+          : <div className="App">
+              <NotLoggedInNavBar />
+              <WelcomeUser />
           <Switch>
-            <Route exact path="/">
-              <Link to="/admin">
-                <a>Admin Login</a>
-              </Link> 
-              <div className="app__body"> 
-                <div className="app__container">
-                  {/* <Dashboard current_user={this.props.current_user}/> */}
-                  {this.handleExchangeListLoading()}
-                </div>
-              </div>
-            </Route>
-  
-            <Route exact path="/commodities">
-              <Link to="/admin">
-                <a>Admin Login</a>
-              </Link>  
-              <div className="app__body"> 
-                <div className="app__container">
-                  {this.handleCommodityListLoading()}
-                </div>
-              </div>
-            </Route>
-            
-            <Route exact path="/currencies">
-              <Link to="/admin">
-                <a>Admin Login</a>
-              </Link>  
-              <div className="app__body"> 
-                <div className="app__container">
-                  {this.handleCurrencyListLoading()}
-                </div>
-              </div>
-            </Route>
 
-            <Route exact path="/admin">
-              <Link to="/">
-                <a>Log Out </a>
-              </Link>
-              <h1>Welcome Administrator</h1>
-              <div className="cryptoList">
-                <Link to={"/admin/add"}>
-                    <div id="commodity" className="row">
-                        <div className="row__intro">
-                            <h1>Add Data</h1>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={"/admin/delete"}>
-                    <div id="commodity" className="row">
-                        <div className="row__intro">
-                            <h1>Delete Data</h1>
-                        </div>
-                    </div>
-                </Link>
-              </div>
-            </Route>
+          <Route exact path="/">
+            {this.handleExchangeListLoading()}
+          </Route>
 
-            <Route exact path="/admin/add">
-              <Link to="/admin">
-                <a>Back</a>
-              </Link>
-              <div className="app__body"> 
-                <div className="app__container">
-                  {this.handleExchangeListAdminLoading()}
-                </div>
-              </div>
-            </Route>
+          <Route exact path="/commodities">  
+            {this.handleCommodityListLoading()}
+          </Route>
+          
+          <Route exact path="/currencies"> 
+            {this.handleCurrencyListLoading()}
+          </Route>
 
-            <Route path="/admin/add/:id" component={this.handleExchangeProps} />
+          <Route exact path="/login">
+            <LoginForm />
+          </Route>
 
-            <Route path="/admin/add_commodity/:id" component={this.handleAddCommodityProps} />
+          <Route path="/">
+            {this.handleExchangeListLoading()}
+          </Route>
 
-            <Route path="/admin/add_currency/:id" component={this.handleAddCurrencyProps} />
-
-            <Route exact path="/admin/delete">
-              <Link to="/">
-                <a>Log Out </a>
-              </Link>
-              <h1>Welcome Administrator</h1>
-              <div className="cryptoList">
-                <Link to={"/admin/delete_exchange"}>
-                    <div id="commodity" className="row">
-                        <div className="row__intro">
-                          <h1>Delete Exchange</h1>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={"/admin/delete_commodity"}>
-                    <div id="commodity" className="row">
-                        <div className="row__intro">
-                          <h1>Delete Commodity</h1>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={"/admin/delete_currency"}>
-                    <div id="commodity" className="row">
-                        <div className="row__intro">
-                          <h1>Delete Currency</h1>
-                        </div>
-                    </div>
-                </Link>
-              </div>
-            </Route>
-
-            <Route exact path="/admin/delete_exchange">
-              <Link to="/admin">
-                <a>Back</a>
-              </Link>
-              <div className="app__body"> 
-                <div className="app__container">
-                  {this.handleExchangeListAdminDeleteLoading()}
-                </div>
-              </div>
-            </Route>
-            
-            <Route exact path="/admin/delete_commodity">
-              <Link to="/admin">
-                <a>Back</a>
-              </Link>
-              <div className="app__body"> 
-                <div className="app__container">
-                  {this.handleCommodityListAdminDeleteLoading()}
-                </div>
-              </div>
-            </Route>
-            
-            <Route exact path="/admin/delete_currency">
-              <Link to="/admin">
-                <a>Back</a>
-              </Link>
-              <div className="app__body"> 
-                <div className="app__container">
-                  {this.handleCurrencyListAdminDeleteLoading()}
-                </div>
-              </div>
-            </Route>
-
-          </Switch>
+          </Switch> </div>} 
         </Router>
-        </div>
       </>
     )
   }
@@ -279,7 +233,10 @@ const mapStateToProps = state => {
     exchangeData: state.exchange.exchanges,
     commodityData: state.exchange.commodities,
     currencyData: state.exchange.currencies,
-    loading: state.exchange.loading
+    loading: state.exchange.loading,
+    login: state.user.login,
+    current_user: state.user.user,
+    user_loading: state.user.loading
   }
 }
 
@@ -287,32 +244,10 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchExchanges: () => dispatch(fetchExchanges()),
     fetchCommodities: () => dispatch(fetchCommodities()),
-    fetchCurrencies: () => dispatch(fetchCurrencies())
+    fetchCurrencies: () => dispatch(fetchCurrencies()),
+    fetchLoggedInUser: () => dispatch(fetchLoggedInUser()),
+    logOutUser: () => dispatch(logOutUser())
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;

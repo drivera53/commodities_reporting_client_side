@@ -10,7 +10,7 @@ export class ExchangeChooseAdmin extends React.Component {
         const {id, name} = this.props.exchange
         return (
             <div className="cryptoList">
-                <Link to="/admin">
+                <Link to="/admin/add">
                     <a>Back</a>
                 </Link>
                 <div className="cryptoList__container">

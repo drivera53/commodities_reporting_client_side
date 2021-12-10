@@ -15,12 +15,12 @@ import logger from 'redux-logger'
 // Importing Reducers
 import { combineReducers } from 'redux'
 import exchangesReducer from './reducers/exchangesReducer'
-// import usersReducer from './reducers/usersReducer'
+import usersReducer from './reducers/usersReducer'
 
 import reportWebVitals from './reportWebVitals';
 
 const rootReducer = combineReducers({
-  // user: usersReducer,
+  user: usersReducer,
   exchange: exchangesReducer
 })
 
